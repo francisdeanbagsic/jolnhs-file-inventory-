@@ -386,7 +386,7 @@ export default function DashboardPage() {
           animate={{ opacity: 1, y: 0 }}
         >
           <Typography variant="h4" sx={{ fontWeight: 800, color: 'text.primary', mb: 1, letterSpacing: '-0.02em' }}>
-            Welcome back, {user?.name?.split(' ')[0]} 👋
+            Welcome back, <span style={{color:'#0077B6'}}>{user?.name?.split(' ')[0] === "System" ? "Admin" : user?.name?.split(' ')[0] }! </span>
           </Typography>
           <Typography variant="body1" sx={{ color: '#64748B' }}>
             Here's what's happening with your documents today.

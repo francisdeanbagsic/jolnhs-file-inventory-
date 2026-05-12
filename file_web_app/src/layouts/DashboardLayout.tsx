@@ -120,7 +120,7 @@ export default function DashboardLayout() {
   ];
 
   const drawer = (
-    <Box sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
+    <Box sx={{ height: '100%', display: 'flex', flexDirection: 'column',backgroundColor:"#023e8a" }}>
       {/* Logo Section */}
       <Box
         sx={{
@@ -225,7 +225,27 @@ export default function DashboardLayout() {
       <Divider sx={{ borderColor: 'rgba(255, 255, 255, 0.1)', mx: 2 }} />
 
       {/* Categories Section */}
-      <Box sx={{ flex: 1, overflow: 'auto', px: 1.5, py: 2 }}>
+      <Box sx={{ 
+        flex: 1, 
+        overflow: 'auto', 
+        px: 1.5, 
+        py: 2,
+        '&::-webkit-scrollbar': {
+          width: '8px',
+        },
+        '&::-webkit-scrollbar-track': {
+          backgroundColor: 'transparent',
+        },
+        '&::-webkit-scrollbar-thumb': {
+          backgroundColor: '#64B5F6',
+          borderRadius: '4px',
+          '&:hover': {
+            backgroundColor: '#42A5F5',
+            opacity: 0.8,
+          },
+        },
+        scrollbarColor: '#64B5F6 transparent',
+      }}>
         <Typography variant="caption" sx={{ color: '#64748B', px: 1, mb: 1, display: 'block' }}>
           CATEGORIES
         </Typography>
