@@ -15,7 +15,6 @@ import {
   DialogTitle,
   DialogContent,
   DialogActions,
-  Chip,
   Tab,
   Tabs
 } from '@mui/material';
@@ -31,31 +30,31 @@ import { motion } from 'framer-motion';
 import { useReminderStore } from '../store/appStore';
 import { CATEGORIES, type Reminder } from '../types';
 
-const categoryColors: Record<string, string> = {
-  'feeding/health': '#10B981',
-  'drrm': '#F59E0B',
-  'test result': '#3B82F6',
-  'lac/inset': '#8B5CF6',
-  'gulayan sa paaralan': '#22C55E',
-  'aral': '#06B6D4',
-  'literacy report': '#EC4899',
-  'guidance report': '#F97316',
-  'LR report': '#6366F1',
-  'YES-o': '#14B8A6',
-  'SSLG': '#A855F7',
-  'BKD': '#EAB308',
-  'research report': '#0EA5E9',
-  'brigada': '#F43F5E',
-  'OITSP': '#84CC16',
-  'SBM': '#64748B',
-  'SGC': '#D946EF',
-  'Boys/girls scout': '#F59E0B',
-  'LIS/BEIS report': '#0D9488',
-  'PRAES': '#7C3AED',
-  'STE': '#2563EB',
-  'sp-ict': '#06B6D4',
-  'sports': '#EF4444'
-};
+// const categoryColors: Record<string, string> = {
+//   'feeding/health': '#10B981',
+//   'drrm': '#F59E0B',
+//   'test result': '#3B82F6',
+//   'lac/inset': '#8B5CF6',
+//   'gulayan sa paaralan': '#22C55E',
+//   'aral': '#06B6D4',
+//   'literacy report': '#EC4899',
+//   'guidance report': '#F97316',
+//   'LR report': '#6366F1',
+//   'YES-o': '#14B8A6',
+//   'SSLG': '#A855F7',
+//   'BKD': '#EAB308',
+//   'research report': '#0EA5E9',
+//   'brigada': '#F43F5E',
+//   'OITSP': '#84CC16',
+//   'SBM': '#64748B',
+//   'SGC': '#D946EF',
+//   'Boys/girls scout': '#F59E0B',
+//   'LIS/BEIS report': '#0D9488',
+//   'PRAES': '#7C3AED',
+//   'STE': '#2563EB',
+//   'sp-ict': '#06B6D4',
+//   'sports': '#EF4444'
+// };
 
 function ReminderItem({ reminder, onComplete, onSnooze, onDelete }: { 
   reminder: Reminder; 
@@ -356,14 +355,14 @@ export default function RemindersPage() {
         slotProps={{
           paper: {
             sx: {
-              bgcolor: 'background.paper',
-              backgroundImage: 'none',
+              bgcolor: '#1E293B',
+              border: '1px solid rgba(255, 255, 255, 0.1)',
               borderRadius: 3
             }
           }
         }}
       >
-        <DialogTitle sx={{ color: '#F8FAFC' }}>Create New Reminder</DialogTitle>
+        <DialogTitle sx={{ color: 'white', fontWeight: 800 }}>Create New Reminder</DialogTitle>
         <DialogContent>
           <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2, pt: 1 }}>
             <TextField
@@ -374,12 +373,12 @@ export default function RemindersPage() {
               required
               sx={{
                 '& .MuiOutlinedInput-root': {
-                  bgcolor: 'rgba(15, 23, 42, 0.5)',
-                  '& fieldset': { borderColor: 'rgba(255, 255, 255, 0.1)' },
-                  '&:hover fieldset': { borderColor: 'rgba(255, 255, 255, 0.2)' },
-                  '&.Mui-focused fieldset': { borderColor: '#F59E0B' }
+                  bgcolor: 'transparent',
+                  '& fieldset': { borderColor: 'divider' },
+                  '&:hover fieldset': { borderColor: 'primary.light' },
+                  '&.Mui-focused fieldset': { borderColor: 'primary.main' }
                 },
-                '& .MuiInputLabel-root': { color: '#94A3B8' },
+                '& .MuiInputLabel-root': { color: 'text.secondary' },
                 '& .MuiInputBase-input': { color: '#F8FAFC' }
               }}
             />
@@ -391,15 +390,17 @@ export default function RemindersPage() {
                 onChange={(e) => setNewReminder({ ...newReminder, category: e.target.value })}
                 label="Category"
                 sx={{
-                  bgcolor: 'rgba(15, 23, 42, 0.5)',
-                  '& .MuiOutlinedInput-notchedOutline': { borderColor: 'rgba(255, 255, 255, 0.1)' },
-                  '&:hover .MuiOutlinedInput-notchedOutline': { borderColor: 'rgba(255, 255, 255, 0.2)' },
-                  '&.Mui-focused .MuiOutlinedInput-notchedOutline': { borderColor: '#F59E0B' },
-                  '& .MuiSelect-select': { color: '#F8FAFC' }
+                  bgcolor: 'transparent',
+                  '& .MuiOutlinedInput-notchedOutline': { borderColor: 'divider' },
+                  '&:hover .MuiOutlinedInput-notchedOutline': { borderColor: 'primary.light' },
+                  '&.Mui-focused .MuiOutlinedInput-notchedOutline': { borderColor: 'primary.main' },
+                  '& .MuiSelect-select': { color: 'text.primary' },
+                  '& .MuiInputBase-input': { color: '#F8FAFC' },
+                  '& .MuiSvgIcon-root': { color: '#F8FAFC' }
                 }}
               >
                 {CATEGORIES.map((cat) => (
-                  <MenuItem key={cat} value={cat}>
+                  <MenuItem key={cat} value={cat} sx={{ color: 'text.primary' }}>
                     {cat.split(' ').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ')}
                   </MenuItem>
                 ))}
@@ -416,13 +417,15 @@ export default function RemindersPage() {
               slotProps={{ inputLabel: { shrink: true } }}
               sx={{
                 '& .MuiOutlinedInput-root': {
-                  bgcolor: 'rgba(15, 23, 42, 0.5)',
-                  '& fieldset': { borderColor: 'rgba(255, 255, 255, 0.1)' },
-                  '&:hover fieldset': { borderColor: 'rgba(255, 255, 255, 0.2)' },
-                  '&.Mui-focused fieldset': { borderColor: '#F59E0B' }
+                  bgcolor: 'transparent',
+                  '& fieldset': { borderColor: 'divider' },
+                  '&:hover fieldset': { borderColor: 'primary.light' },
+                  '&.Mui-focused fieldset': { borderColor: 'primary.main' }
                 },
-                '& .MuiInputLabel-root': { color: '#94A3B8' },
-                '& .MuiInputBase-input': { color: '#F8FAFC' }
+                '& .MuiInputLabel-root': { color: 'text.secondary' },
+                '& .MuiInputBase-input': { color: '#F8FAFC' },
+                '& .MuiInputBase-input::placeholder': { color: '#94A3B8', opacity: 0.7 },
+  
               }}
             />
 
@@ -435,12 +438,12 @@ export default function RemindersPage() {
               rows={2}
               sx={{
                 '& .MuiOutlinedInput-root': {
-                  bgcolor: 'rgba(15, 23, 42, 0.5)',
-                  '& fieldset': { borderColor: 'rgba(255, 255, 255, 0.1)' },
-                  '&:hover fieldset': { borderColor: 'rgba(255, 255, 255, 0.2)' },
-                  '&.Mui-focused fieldset': { borderColor: '#F59E0B' }
+                  bgcolor: 'transparent',
+                  '& fieldset': { borderColor: 'divider' },
+                  '&:hover fieldset': { borderColor: 'primary.light' },
+                  '&.Mui-focused fieldset': { borderColor: 'primary.main' }
                 },
-                '& .MuiInputLabel-root': { color: '#94A3B8' },
+                '& .MuiInputLabel-root': { color: 'text.secondary' },
                 '& .MuiInputBase-input': { color: '#F8FAFC' }
               }}
             />
@@ -455,10 +458,8 @@ export default function RemindersPage() {
             variant="contained"
             disabled={!newReminder.title || !newReminder.category || !newReminder.dueDate}
             sx={{
-              background: 'linear-gradient(135deg, #F59E0B 0%, #D97706 100%)',
-              '&:hover': {
-                background: 'linear-gradient(135deg, #D97706 0%, #B45309 100%)'
-              }
+              borderRadius: 2,
+              fontWeight: 600
             }}
           >
             Create Reminder

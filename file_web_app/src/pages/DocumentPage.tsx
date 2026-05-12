@@ -432,15 +432,14 @@ export default function DocumentsPage() {
         slotProps={{
           paper: {
             sx: {
-              bgcolor: 'background.paper',
-              border: '1px solid',
-              borderColor: 'divider',
+              bgcolor: '#1E293B',
+              border: '1px solid rgba(255, 255, 255, 0.1)',
               borderRadius: 3
             }
           }
         }}
       >
-        <DialogTitle sx={{ color: '#F8FAFC' }}>Confirm Delete</DialogTitle>
+        <DialogTitle sx={{ color: 'white', fontWeight: 800 }}>Confirm Delete</DialogTitle>
         <DialogContent>
           <Typography sx={{ color: '#94A3B8' }}>
             Are you sure you want to delete this document? This action cannot be undone.

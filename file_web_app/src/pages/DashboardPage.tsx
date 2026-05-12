@@ -29,31 +29,31 @@ import { useAuthStore } from '../store/authStore';
 import { useDashboardStore, useDocumentStore, useReminderStore } from '../store/appStore';
 import { CATEGORIES, type Document, type Reminder as ReminderType } from '../types';
 
-const categoryColors: Record<string, string> = {
-  'feeding/health': '#10B981',
-  'drrm': '#F59E0B',
-  'test result': '#3B82F6',
-  'lac/inset': '#8B5CF6',
-  'gulayan sa paaralan': '#22C55E',
-  'aral': '#06B6D4',
-  'literacy report': '#EC4899',
-  'guidance report': '#F97316',
-  'LR report': '#6366F1',
-  'YES-o': '#14B8A6',
-  'SSLG': '#A855F7',
-  'BKD': '#EAB308',
-  'research report': '#0EA5E9',
-  'brigada': '#F43F5E',
-  'OITSP': '#84CC16',
-  'SBM': '#64748B',
-  'SGC': '#D946EF',
-  'Boys/girls scout': '#F59E0B',
-  'LIS/BEIS report': '#0D9488',
-  'PRAES': '#7C3AED',
-  'STE': '#2563EB',
-  'sp-ict': '#06B6D4',
-  'sports': '#EF4444'
-};
+// const categoryColors: Record<string, string> = {
+//   'feeding/health': '#10B981',
+//   'drrm': '#F59E0B',
+//   'test result': '#3B82F6',
+//   'lac/inset': '#8B5CF6',
+//   'gulayan sa paaralan': '#22C55E',
+//   'aral': '#06B6D4',
+//   'literacy report': '#EC4899',
+//   'guidance report': '#F97316',
+//   'LR report': '#6366F1',
+//   'YES-o': '#14B8A6',
+//   'SSLG': '#A855F7',
+//   'BKD': '#EAB308',
+//   'research report': '#0EA5E9',
+//   'brigada': '#F43F5E',
+//   'OITSP': '#84CC16',
+//   'SBM': '#64748B',
+//   'SGC': '#D946EF',
+//   'Boys/girls scout': '#F59E0B',
+//   'LIS/BEIS report': '#0D9488',
+//   'PRAES': '#7C3AED',
+//   'STE': '#2563EB',
+//   'sp-ict': '#06B6D4',
+//   'sports': '#EF4444'
+// };
 
 const categoryIcons: Record<string, React.ReactNode> = {
   'feeding/health': <Description />,
@@ -101,7 +101,7 @@ function StatCard({ title, value, icon, color, delay }: { title: string; value: 
           '&:hover': {
             transform: 'translateY(-4px)',
             borderColor: 'primary.light',
-            boxShadow: theme => `0 12px 24px -10px ${color}40`
+            boxShadow: _theme => `0 12px 24px -10px ${color}40`
           }
         }}
       >

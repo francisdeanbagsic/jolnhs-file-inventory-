@@ -292,7 +292,7 @@ export default function UsersPage() {
           }
         }}
       >
-        <DialogTitle sx={{ color: 'text.primary', fontWeight: 800 }}>Create New User</DialogTitle>
+        <DialogTitle sx={{ color: 'white', fontWeight: 800 }}>Create New User</DialogTitle>
         <DialogContent>
           <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2, pt: 1 }}>
             <TextField
@@ -302,14 +302,15 @@ export default function UsersPage() {
               onChange={(e) => setNewUser({ ...newUser, name: e.target.value })}
               required
               sx={{
+              
                 '& .MuiOutlinedInput-root': {
-                  bgcolor: 'action.hover',
+                  bgcolor: 'transparent',
                   '& fieldset': { borderColor: 'divider' },
                   '&:hover fieldset': { borderColor: 'primary.light' },
                   '&.Mui-focused fieldset': { borderColor: 'primary.main' }
                 },
                 '& .MuiInputLabel-root': { color: 'text.secondary' },
-                '& .MuiInputBase-input': { color: 'text.primary' }
+                '& .MuiInputBase-input': { color: '#F8FAFC' }
               }}
             />
             <TextField
@@ -321,13 +322,13 @@ export default function UsersPage() {
               required
               sx={{
                 '& .MuiOutlinedInput-root': {
-                  bgcolor: 'action.hover',
+                  bgcolor: 'transparent',
                   '& fieldset': { borderColor: 'divider' },
                   '&:hover fieldset': { borderColor: 'primary.light' },
                   '&.Mui-focused fieldset': { borderColor: 'primary.main' }
                 },
                 '& .MuiInputLabel-root': { color: 'text.secondary' },
-                '& .MuiInputBase-input': { color: 'text.primary' }
+                '& .MuiInputBase-input': { color: '#F8FAFC' }
               }}
             />
             <TextField
@@ -339,13 +340,13 @@ export default function UsersPage() {
               required
               sx={{
                 '& .MuiOutlinedInput-root': {
-                  bgcolor: 'action.hover',
+                  bgcolor: 'transparent',
                   '& fieldset': { borderColor: 'divider' },
                   '&:hover fieldset': { borderColor: 'primary.light' },
                   '&.Mui-focused fieldset': { borderColor: 'primary.main' }
                 },
                 '& .MuiInputLabel-root': { color: 'text.secondary' },
-                '& .MuiInputBase-input': { color: 'text.primary' }
+                '& .MuiInputBase-input': { color: '#F8FAFC' }
               }}
             />
             <FormControl fullWidth>
@@ -355,16 +356,19 @@ export default function UsersPage() {
                 onChange={(e) => setNewUser({ ...newUser, role: e.target.value })}
                 label="Role"
                 sx={{
-                  bgcolor: 'action.hover',
+                  bgcolor: 'transparent',
                   '& .MuiOutlinedInput-notchedOutline': { borderColor: 'divider' },
                   '&:hover .MuiOutlinedInput-notchedOutline': { borderColor: 'primary.light' },
                   '&.Mui-focused .MuiOutlinedInput-notchedOutline': { borderColor: 'primary.main' },
-                  '& .MuiSelect-select': { color: 'text.primary' }
+                  '& .MuiSelect-select': { color: 'text.primary' },
+                  '& .MuiInputBase-input': { color: '#F8FAFC' },
+                  '& .MuiInputBase-input::placeholder': { color: '#94A3B8', opacity: 0.7 },
+                  '& .MuiSvgIcon-root': { color: '#F8FAFC' }
                 }}
               >
-                <MenuItem value="teacher">Teacher</MenuItem>
-                <MenuItem value="faculty">Faculty Staff</MenuItem>
-                <MenuItem value="admin">Administrator</MenuItem>
+                <MenuItem value="teacher" sx={{ color: 'text.primary' }}>Teacher</MenuItem>
+                <MenuItem value="faculty" sx={{ color: 'text.primary' }}>Faculty Staff</MenuItem>
+                <MenuItem value="admin" sx={{ color: 'text.primary' }}>Administrator</MenuItem>
               </Select>
             </FormControl>
           </Box>
@@ -396,15 +400,14 @@ export default function UsersPage() {
         slotProps={{
           paper: {
             sx: {
-              bgcolor: 'background.paper',
-              border: '1px solid',
-              borderColor: 'divider',
+              bgcolor: '#1E293B',
+              border: '1px solid rgba(255, 255, 255, 0.1)',
               borderRadius: 3
             }
           }
         }}
       >
-        <DialogTitle sx={{ color: 'text.primary', fontWeight: 800 }}>Edit User</DialogTitle>
+        <DialogTitle sx={{ color: 'white', fontWeight: 800 }}>Edit User</DialogTitle>
         <DialogContent>
           {editDialog && (
             <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2, pt: 1 }}>
@@ -415,12 +418,12 @@ export default function UsersPage() {
                 onChange={(e) => setEditDialog({ ...editDialog, name: e.target.value })}
                 sx={{
                   '& .MuiOutlinedInput-root': {
-                    bgcolor: 'rgba(15, 23, 42, 0.5)',
-                    '& fieldset': { borderColor: 'rgba(255, 255, 255, 0.1)' },
-                    '&:hover fieldset': { borderColor: 'rgba(255, 255, 255, 0.2)' },
-                    '&.Mui-focused fieldset': { borderColor: '#8B5CF6' }
+                    bgcolor: 'transparent',
+                    '& fieldset': { borderColor: 'divider' },
+                    '&:hover fieldset': { borderColor: 'primary.light' },
+                    '&.Mui-focused fieldset': { borderColor: 'primary.main' }
                   },
-                  '& .MuiInputLabel-root': { color: '#94A3B8' },
+                  '& .MuiInputLabel-root': { color: 'text.secondary' },
                   '& .MuiInputBase-input': { color: '#F8FAFC' }
                 }}
               />
@@ -431,16 +434,18 @@ export default function UsersPage() {
                   onChange={(e) => setEditDialog({ ...editDialog, role: e.target.value as any })}
                   label="Role"
                   sx={{
-                    bgcolor: 'rgba(15, 23, 42, 0.5)',
-                    '& .MuiOutlinedInput-notchedOutline': { borderColor: 'rgba(255, 255, 255, 0.1)' },
-                    '&:hover .MuiOutlinedInput-notchedOutline': { borderColor: 'rgba(255, 255, 255, 0.2)' },
-                    '&.Mui-focused .MuiOutlinedInput-notchedOutline': { borderColor: '#8B5CF6' },
-                    '& .MuiSelect-select': { color: '#F8FAFC' }
+                    bgcolor: 'transparent',
+                    '& .MuiOutlinedInput-notchedOutline': { borderColor: 'divider' },
+                    '&:hover .MuiOutlinedInput-notchedOutline': { borderColor: 'primary.light' },
+                    '&.Mui-focused .MuiOutlinedInput-notchedOutline': { borderColor: 'primary.main' },
+                    '& .MuiSelect-select': { color: 'text.primary' },
+                    '& .MuiInputBase-input': { color: '#F8FAFC' },
+                    '& .MuiSvgIcon-root': { color: '#F8FAFC' }
                   }}
                 >
-                  <MenuItem value="teacher">Teacher</MenuItem>
-                  <MenuItem value="faculty">Faculty Staff</MenuItem>
-                  <MenuItem value="admin">Administrator</MenuItem>
+                  <MenuItem value="teacher" sx={{ color: 'text.primary' }}>Teacher</MenuItem>
+                  <MenuItem value="faculty" sx={{ color: 'text.primary' }}>Faculty Staff</MenuItem>
+                  <MenuItem value="admin" sx={{ color: 'text.primary' }}>Administrator</MenuItem>
                 </Select>
               </FormControl>
               <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
@@ -477,15 +482,14 @@ export default function UsersPage() {
         slotProps={{
           paper: {
             sx: {
-              bgcolor: 'background.paper',
-              border: '1px solid',
-              borderColor: 'divider',
+              bgcolor: '#1E293B',
+              border: '1px solid rgba(255, 255, 255, 0.1)',
               borderRadius: 3
             }
           }
         }}
       >
-        <DialogTitle sx={{ color: 'text.primary', fontWeight: 800 }}>Confirm Delete</DialogTitle>
+        <DialogTitle sx={{ color: 'white', fontWeight: 800 }}>Confirm Delete</DialogTitle>
         <DialogContent>
           <Typography sx={{ color: '#94A3B8' }}>
             Are you sure you want to delete {deleteDialog?.name}? This action cannot be undone.

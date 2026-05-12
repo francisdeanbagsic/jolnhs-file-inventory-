@@ -39,7 +39,6 @@ import {
   Assessment,
   Person
 } from '@mui/icons-material';
-import { motion, AnimatePresence } from 'framer-motion';
 import { useAuthStore } from '../store/authStore.ts';
 import { useNotificationStore } from '../store/appStore.ts';
 import { CATEGORIES } from '../types';
@@ -93,9 +92,9 @@ export default function DashboardLayout() {
     setMobileOpen(!mobileOpen);
   };
 
-  useState(() => {
+  React.useEffect(() => {
     fetchNotifications();
-  });
+  }, []);
 
   const handleSearch = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -148,11 +147,11 @@ export default function DashboardLayout() {
             <School sx={{ color: 'white', fontSize: 20 }} />
           </Box>
           <Box>
-            <Typography variant="subtitle1" sx={{ fontWeight: 900, color: 'text.primary', lineHeight: 1, letterSpacing: '-0.02em', fontSize: '1.1rem' }}>
-              JOLNHS
+            <Typography variant="subtitle1" sx={{ fontWeight: 900, color: 'white', lineHeight: 1, letterSpacing: '-0.02em', fontSize: '1.1rem', }}>
+              JOLNHS ACR
             </Typography>
             <Typography variant="caption" sx={{ color: 'text.secondary', fontWeight: 600, fontSize: '0.65rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
-              File Inventory
+              Activity Completion Report
             </Typography>
           </Box>
         </Box>
@@ -164,7 +163,6 @@ export default function DashboardLayout() {
       </Box>
 
       {/* Main Menu */}
-      <List sx={{ px: 1.5, py: 2 }}>
       <List sx={{ px: 1.5, py: 2 }}>
         {menuItems.map((item) => {
           const isActive = location.pathname === item.path;
@@ -179,7 +177,7 @@ export default function DashboardLayout() {
                   borderRadius: 2,
                   py: 1.25,
                   backgroundColor: isActive ? 'primary.light' : 'transparent',
-                  color: isActive ? 'primary.main' : 'text.secondary',
+                  color: isActive ? 'primary.main' : '#f7e3e3',
                   transition: 'all 0.2s ease',
                   '&:hover': {
                     backgroundColor: isActive ? 'primary.light' : 'action.hover',
@@ -189,7 +187,7 @@ export default function DashboardLayout() {
                 }}
               >
                 <ListItemIcon sx={{ 
-                  color: isActive ? 'primary.main' : 'text.secondary',
+                  color: isActive ? 'primary.main' : '#f7e3e3',
                   minWidth: 38,
                   '& svg': { fontSize: 20 }
                 }}>
@@ -219,7 +217,6 @@ export default function DashboardLayout() {
             </ListItem>
           );
         })}
-      </List>
       </List>
 
       <Divider sx={{ borderColor: 'rgba(255, 255, 255, 0.1)', mx: 2 }} />
@@ -259,15 +256,15 @@ export default function DashboardLayout() {
                 }}
                 sx={{ borderRadius: 1, py: 0.75 }}
               >
-                <ListItemIcon sx={{ minWidth: 28, fontSize: '1rem' }}>
-                  {categoryIcons[category] || '📄'}
+                <ListItemIcon sx={{ minWidth: 28, fontSize: '1rem', color: '#f7e3e3' }}>
+                  {categoryIcons[category] || 'no category'}
                 </ListItemIcon>
                 <ListItemText
                   primary={category.split(' ').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ')}
                   slotProps={{
                     primary: {
                       variant: 'caption',
-                      sx: { color: '#94A3B8' }
+                      sx: { color: '#f7e3e3' }
                     }
                   }}
                 />
@@ -322,13 +319,13 @@ export default function DashboardLayout() {
           position="fixed"
           elevation={0}
           sx={{
-            width: { md: `calc(100% - ${DRAWER_WIDTH}px)` },
-            ml: { md: `${DRAWER_WIDTH}px` },
+            width: { xs: '100%', md: `calc(100% - ${DRAWER_WIDTH}px)` },
+            ml: { xs: 0, md: `${DRAWER_WIDTH}px` },
             bgcolor: 'background.paper',
             borderBottom: '1px solid',
             borderColor: 'divider',
             backdropFilter: 'blur(8px)',
-            background: 'rgba(255, 255, 255, 0.8)'
+            background: 'rgba(255, 255, 255, 0.9)'
           }}
         >
           <Toolbar>
@@ -556,23 +553,13 @@ export default function DashboardLayout() {
         component="main"
         sx={{
           flexGrow: 1,
-          p: 3,
-          width: isAdminPage ? '100%' : { md: `calc(100% - ${DRAWER_WIDTH}px)` },
+          p: { xs: 2, md: 3 },
+          width: isAdminPage ? '100%' : { xs: '100%', md: `calc(100% - ${DRAWER_WIDTH}px)` },
           mt: isAdminPage ? 0 : '64px',
-          minHeight: isAdminPage ? '100vh' : 'calc(100vh - 64px)'
+          minHeight: 'calc(100vh - 64px)'
         }}
       >
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={location.pathname}
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -10 }}
-            transition={{ duration: 0.2 }}
-          >
-            <Outlet />
-          </motion.div>
-        </AnimatePresence>
+        <Outlet />
       </Box>
     </Box>
   );

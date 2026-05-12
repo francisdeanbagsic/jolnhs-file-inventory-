@@ -113,7 +113,7 @@ export const useDocumentStore = create<DocumentStore>((set, get) => ({
     try {
       const response = await documentsApi.getAll(params);
       set({
-        documents: (response.data.documents || []).filter(doc => doc && doc._id),
+        documents: (response.data.documents || []).filter((doc: any) => doc && doc._id),
         pagination: response.data.pagination || { page: 1, limit: 20, total: 0, pages: 0 },
         isLoading: false
       });

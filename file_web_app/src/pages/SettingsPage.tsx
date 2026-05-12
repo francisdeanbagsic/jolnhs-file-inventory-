@@ -140,7 +140,7 @@ export default function SettingsPage() {
               <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
                 <School sx={{ color: '#64748B', fontSize: 18 }} />
                 <Typography variant="body2" sx={{ color: '#64748B' }}>
-                  Julia Ortiz National High School
+                  JOLNHS ACR - Activity Completion Report
                 </Typography>
               </Box>
             </CardContent>
