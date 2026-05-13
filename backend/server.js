@@ -18,12 +18,12 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const app = express();
-const PORT = process.env.PORT || 5000;
-const MONGODB_URI = process.env.MONGODB_URI || 'mongodb+srv://documentsjolnhs_db_user:W44IpN2nrKVt3lai@documentsjolnhs.vixzw7d.mongodb.net/?appName=documentsJolnhs';
+const PORT = 5000;
+const MONGODB_URI = 'mongodb+srv://documentsjolnhs_db_user:W44IpN2nrKVt3lai@documentsjolnhs.vixzw7d.mongodb.net/?appName=documentsJolnhs';
 
 const ADMIN_EMAIL = 'admin@jonhs.edu.ph';
 const ADMIN_PASSWORD = '  ';
-const ADMIN_NAME = process.env.ADMIN_NAME || 'System Administrator';
+const ADMIN_NAME ='System Administrator';
 
 const allowedOrigins = ['https://jolnhs-acr.onrender.com','http://localhost:5173'];
 
