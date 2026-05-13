@@ -22,11 +22,29 @@ const PORT = process.env.PORT || 5000;
 const MONGODB_URI = process.env.MONGODB_URI || 'mongodb+srv://documentsjolnhs_db_user:W44IpN2nrKVt3lai@documentsjolnhs.vixzw7d.mongodb.net/?appName=documentsJolnhs';
 
 const ADMIN_EMAIL = 'admin@jonhs.edu.ph';
-const ADMIN_PASSWORD = 'admin1234';
+const ADMIN_PASSWORD = '  ';
 const ADMIN_NAME = process.env.ADMIN_NAME || 'System Administrator';
 
+const allowedOrigins = process.env.CORS_ORIGINS
+  ? process.env.CORS_ORIGINS.split(',').map(origin => origin.trim()).filter(Boolean)
+  : ['https://jolnhs-acr.onrender.com/api'];
+
+const corsOptions = {
+  origin: (origin, callback) => {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error(`CORS policy blocked request from ${origin}`));
+    }
+  },
+  methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  credentials: true,
+  optionsSuccessStatus: 200,
+};
+
 // Middleware
-app.use(cors());
+app.use(cors(corsOptions));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
