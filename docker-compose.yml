@@ -23,3 +23,7 @@ services:
 
 volumes:
   mongo-data:
+
+volumes:
+  mongo-data:
+>>>>>>> b61312e66f1e98cbc77f4e3e2bc7db306358ba5f
