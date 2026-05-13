@@ -27,7 +27,7 @@ const ADMIN_NAME = process.env.ADMIN_NAME || 'System Administrator';
 
 const allowedOrigins = process.env.CORS_ORIGINS
   ? process.env.CORS_ORIGINS.split(',').map(origin => origin.trim()).filter(Boolean)
-  : ['https://jolnhs-acr.onrender.com/api'];
+  : ['https://jolnhs-acr.onrender.com,http://localhost:5173'];
 
 const corsOptions = {
   origin: (origin, callback) => {
