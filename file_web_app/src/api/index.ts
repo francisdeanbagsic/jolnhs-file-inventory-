@@ -25,8 +25,9 @@ api.interceptors.response.use(
     const url = error.config?.url || '';
     const isAuthLogin = url.endsWith('/auth/login');
     const isAuthChangePassword = url.endsWith('/auth/change-password');
+    const isAuthChangeEmail = url.endsWith('/auth/change-email');
 
-    if (error.response?.status === 401 && !isAuthLogin && !isAuthChangePassword) {
+    if (error.response?.status === 401 && !isAuthLogin && !isAuthChangePassword && !isAuthChangeEmail) {
       sessionStorage.removeItem('token');
       window.location.href = '/login';
     }
@@ -41,6 +42,8 @@ export const authApi = {
     api.post('/auth/login', { email, password }),
   changePassword: (currentPassword: string, newPassword: string) =>
     api.post('/auth/change-password', { currentPassword, newPassword }),
+  changeEmail: (currentPassword: string, newEmail: string) =>
+    api.post('/auth/change-email', { currentPassword, newEmail }),
   getMe: () => api.get('/auth/me')
 };
 

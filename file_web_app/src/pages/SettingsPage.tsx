@@ -19,19 +19,24 @@ import {
   Visibility,
   VisibilityOff,
   Save,
-  School
+  School,
+  Email
 } from '@mui/icons-material';
 import { motion } from 'framer-motion';
 import { useAuthStore } from '../store/authStore';
 
 export default function SettingsPage() {
   const navigate = useNavigate();
-  const { user, changePassword, logout } = useAuthStore();
+  const { user, changePassword, changeEmail, logout } = useAuthStore();
   
   const [passwordData, setPasswordData] = useState({
     currentPassword: '',
     newPassword: '',
     confirmPassword: ''
+  });
+  const [emailData, setEmailData] = useState({
+    newEmail: '',
+    currentPassword: ''
   });
   const [showPasswords, setShowPasswords] = useState({
     current: false,
@@ -40,7 +45,10 @@ export default function SettingsPage() {
   });
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
+  const [emailError, setEmailError] = useState<string | null>(null);
+  const [emailSuccess, setEmailSuccess] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [isEmailLoading, setIsEmailLoading] = useState(false);
 
   const handlePasswordChange = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -66,6 +74,28 @@ export default function SettingsPage() {
       setError(err.response?.data?.message || 'Failed to change password');
     } finally {
       setIsLoading(false);
+    }
+  };
+
+  const handleEmailChange = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setEmailError(null);
+    setEmailSuccess(null);
+
+    if (!emailData.newEmail.trim()) {
+      setEmailError('Please enter a new email address');
+      return;
+    }
+
+    setIsEmailLoading(true);
+    try {
+      await changeEmail(emailData.currentPassword, emailData.newEmail);
+      setEmailSuccess('Email updated successfully');
+      setEmailData({ newEmail: '', currentPassword: '' });
+    } catch (err: any) {
+      setEmailError(err.response?.data?.message || 'Failed to update email');
+    } finally {
+      setIsEmailLoading(false);
     }
   };
 
@@ -143,6 +173,106 @@ export default function SettingsPage() {
                   JOLNHS ACR - Activity Completion Report
                 </Typography>
               </Box>
+            </CardContent>
+          </Card>
+        </motion.div>
+
+        {/* Change Email Card */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.15 }}
+        >
+          <Card sx={{ bgcolor: '#1E293B', border: '1px solid rgba(255, 255, 255, 0.1)' }}>
+            <CardContent sx={{ p: 3 }}>
+              <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, mb: 3 }}>
+                <Email sx={{ color: '#38BDF8' }} />
+                <Typography variant="h6" sx={{ color: '#F8FAFC', fontWeight: 600 }}>
+                  Change Email Address
+                </Typography>
+              </Box>
+
+              {emailError && (
+                <Alert severity="error" sx={{ mb: 3 }}>
+                  {emailError}
+                </Alert>
+              )}
+
+              {emailSuccess && (
+                <Alert severity="success" sx={{ mb: 3 }}>
+                  {emailSuccess}
+                </Alert>
+              )}
+
+              <form onSubmit={handleEmailChange}>
+                <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+                  <TextField
+                    fullWidth
+                    type="email"
+                    label="New Email Address"
+                    value={emailData.newEmail}
+                    onChange={(e) => setEmailData({ ...emailData, newEmail: e.target.value })}
+                    required
+                    sx={{
+                      '& .MuiOutlinedInput-root': {
+                        bgcolor: 'rgba(15, 23, 42, 0.5)',
+                        '& fieldset': { borderColor: 'rgba(255, 255, 255, 0.1)' },
+                        '&:hover fieldset': { borderColor: 'rgba(255, 255, 255, 0.2)' },
+                        '&.Mui-focused fieldset': { borderColor: '#38BDF8' }
+                      },
+                      '& .MuiInputLabel-root': { color: '#94A3B8' },
+                      '& .MuiInputBase-input': { color: '#F8FAFC' }
+                    }}
+                  />
+
+                  <TextField
+                    fullWidth
+                    type={showPasswords.current ? 'text' : 'password'}
+                    label="Confirm with Current Password"
+                    value={emailData.currentPassword}
+                    onChange={(e) => setEmailData({ ...emailData, currentPassword: e.target.value })}
+                    required
+                    slotProps={{
+                      input: {
+                        endAdornment: (
+                          <IconButton
+                            onClick={() => setShowPasswords({ ...showPasswords, current: !showPasswords.current })}
+                            edge="end"
+                          >
+                            {showPasswords.current ? <VisibilityOff /> : <Visibility />}
+                          </IconButton>
+                        )
+                      }
+                    }}
+                    sx={{
+                      '& .MuiOutlinedInput-root': {
+                        bgcolor: 'rgba(15, 23, 42, 0.5)',
+                        '& fieldset': { borderColor: 'rgba(255, 255, 255, 0.1)' },
+                        '&:hover fieldset': { borderColor: 'rgba(255, 255, 255, 0.2)' },
+                        '&.Mui-focused fieldset': { borderColor: '#38BDF8' }
+                      },
+                      '& .MuiInputLabel-root': { color: '#94A3B8' },
+                      '& .MuiInputBase-input': { color: '#F8FAFC' }
+                    }}
+                  />
+
+                  <Button
+                    type="submit"
+                    variant="contained"
+                    startIcon={<Save />}
+                    disabled={isEmailLoading || !emailData.newEmail || !emailData.currentPassword}
+                    sx={{
+                      mt: 1,
+                      background: 'linear-gradient(135deg, #38BDF8 0%, #0EA5E9 100%)',
+                      '&:hover': {
+                        background: 'linear-gradient(135deg, #0EA5E9 0%, #0284C7 100%)'
+                      }
+                    }}
+                  >
+                    {isEmailLoading ? 'Saving...' : 'Update Email'}
+                  </Button>
+                </Box>
+              </form>
             </CardContent>
           </Card>
         </motion.div>

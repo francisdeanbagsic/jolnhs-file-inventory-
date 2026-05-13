@@ -12,6 +12,7 @@ interface AuthStore {
   login: (email: string, password: string) => Promise<void>;
   logout: () => void;
   changePassword: (currentPassword: string, newPassword: string) => Promise<void>;
+  changeEmail: (currentPassword: string, newEmail: string) => Promise<void>;
   checkAuth: () => Promise<void>;
 }
 
@@ -60,6 +61,23 @@ export const useAuthStore = create<AuthStore>()(
           set({
             isLoading: false,
             error: error.response?.data?.message || 'Password change failed'
+          });
+          throw error;
+        }
+      },
+
+      changeEmail: async (currentPassword: string, newEmail: string) => {
+        set({ isLoading: true, error: null });
+        try {
+          const response = await authApi.changeEmail(currentPassword, newEmail);
+          set((state) => ({
+            user: state.user ? { ...state.user, email: response.data.email } : state.user,
+            isLoading: false
+          }));
+        } catch (error: any) {
+          set({
+            isLoading: false,
+            error: error.response?.data?.message || 'Email update failed'
           });
           throw error;
         }

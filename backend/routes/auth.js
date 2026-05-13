@@ -76,6 +76,45 @@ router.post('/change-password', auth, async (req, res) => {
   }
 });
 
+// Change email address
+router.post('/change-email', auth, async (req, res) => {
+  try {
+    const { currentPassword, newEmail } = req.body;
+
+    if (!currentPassword || !newEmail) {
+      return res.status(400).json({ message: 'Current password and new email are required' });
+    }
+
+    const normalizedEmail = newEmail.toLowerCase().trim();
+    if (!normalizedEmail.match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/)) {
+      return res.status(400).json({ message: 'Please provide a valid email address' });
+    }
+
+    const user = await User.findById(req.user._id);
+    const isMatch = await user.comparePassword(currentPassword);
+    if (!isMatch) {
+      return res.status(401).json({ message: 'Current password is incorrect' });
+    }
+
+    if (user.email === normalizedEmail) {
+      return res.status(400).json({ message: 'New email must be different from the current email' });
+    }
+
+    const existingUser = await User.findOne({ email: normalizedEmail });
+    if (existingUser) {
+      return res.status(409).json({ message: 'Email address is already in use' });
+    }
+
+    user.email = normalizedEmail;
+    await user.save();
+
+    res.json({ message: 'Email updated successfully', email: user.email });
+  } catch (error) {
+    console.error('Change email error:', error);
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
 // Get current user
 router.get('/me', auth, async (req, res) => {
   res.json({ user: req.user });
