@@ -25,9 +25,7 @@ const ADMIN_EMAIL = 'admin@jonhs.edu.ph';
 const ADMIN_PASSWORD = '  ';
 const ADMIN_NAME = process.env.ADMIN_NAME || 'System Administrator';
 
-const allowedOrigins = process.env.CORS_ORIGINS
-  ? process.env.CORS_ORIGINS.split(',').map(origin => origin.trim()).filter(Boolean)
-  : ['https://jolnhs-acr.onrender.com','https://jolnhs-acr.netlify.app'];
+const allowedOrigins = ['https://jolnhs-acr.onrender.com','https://jolnhs-acr.netlify.app'];
 
 const corsOptions = {
   origin: (origin, callback) => {
