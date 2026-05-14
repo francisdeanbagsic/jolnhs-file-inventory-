@@ -9,6 +9,7 @@ interface AuthStore {
   isAuthenticated: boolean;
   isLoading: boolean;
   error: string | null;
+  lockoutExpiresAt: number | null;
   login: (email: string, password: string) => Promise<void>;
   logout: () => void;
   changePassword: (currentPassword: string, newPassword: string) => Promise<void>;
@@ -25,8 +26,9 @@ export const useAuthStore = create<AuthStore>()(
       isLoading: false,
       error: null,
 
+      lockoutExpiresAt: null,
       login: async (email: string, password: string) => {
-        set({ isLoading: true, error: null });
+        set({ isLoading: true, error: null, lockoutExpiresAt: null });
         try {
           const response = await authApi.login(email, password);
           const { token, user } = response.data;
@@ -36,12 +38,14 @@ export const useAuthStore = create<AuthStore>()(
             user,
             token,
             isAuthenticated: true,
-            isLoading: false
+            isLoading: false,
+            lockoutExpiresAt: null
           });
         } catch (error: any) {
           set({
             isLoading: false,
-            error: error.response?.data?.message || 'Login failed'
+            error: error.response?.data?.message || 'Login failed',
+            lockoutExpiresAt: error.response?.data?.lockoutExpiresAt ? Number(error.response?.data?.lockoutExpiresAt) : null
           });
           throw error;
         }

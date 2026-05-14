@@ -43,7 +43,8 @@ import { useAuthStore } from '../store/authStore.ts';
 import { useNotificationStore } from '../store/appStore.ts';
 import { CATEGORIES } from '../types';
 
-const DRAWER_WIDTH = 280;
+const DRAWER_WIDTH = 320;
+const MOBILE_DRAWER_WIDTH = 280;
 
 const categoryIcons: Record<string, React.ReactNode> = {
   'feeding/health': <Folder />,
@@ -119,7 +120,7 @@ export default function DashboardLayout() {
   ];
 
   const drawer = (
-    <Box sx={{ height: '100%', display: 'flex', flexDirection: 'column',backgroundColor:"#023e8a" }}>
+    <Box sx={{ height: '100%', display: 'flex', flexDirection: 'column', backgroundColor: "#023e8a" }}>
       {/* Logo Section */}
       <Box
         sx={{
@@ -128,7 +129,8 @@ export default function DashboardLayout() {
           alignItems: 'center',
           justifyContent: 'space-between',
           borderBottom: '1px solid',
-          borderColor: 'divider'
+          borderColor: 'divider',
+          flexShrink: 0
         }}
       >
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
@@ -162,71 +164,11 @@ export default function DashboardLayout() {
         )}
       </Box>
 
-      {/* Main Menu */}
-      <List sx={{ px: 1.5, py: 2 }}>
-        {menuItems.map((item) => {
-          const isActive = location.pathname === item.path;
-          return (
-            <ListItem key={item.text} disablePadding sx={{ mb: 0.5 }}>
-              <ListItemButton
-                onClick={() => {
-                  navigate(item.path);
-                  if (isMobile) setMobileOpen(false);
-                }}
-                sx={{
-                  borderRadius: 2,
-                  py: 1.25,
-                  backgroundColor: isActive ? 'primary.light' : 'transparent',
-                  color: isActive ? 'primary.main' : '#f7e3e3',
-                  transition: 'all 0.2s ease',
-                  '&:hover': {
-                    backgroundColor: isActive ? 'primary.light' : 'action.hover',
-                    color: isActive ? 'primary.main' : 'text.primary',
-                    '& .MuiListItemIcon-root': { color: isActive ? 'primary.main' : 'text.primary' }
-                  }
-                }}
-              >
-                <ListItemIcon sx={{ 
-                  color: isActive ? 'primary.main' : '#f7e3e3',
-                  minWidth: 38,
-                  '& svg': { fontSize: 20 }
-                }}>
-                  {item.icon}
-                </ListItemIcon>
-                <ListItemText 
-                  primary={item.text}
-                  slotProps={{
-                    primary: {
-                      sx: { fontWeight: isActive ? 700 : 500, fontSize: '0.9rem' }
-                    }
-                  }}
-                />
-                {isActive && (
-                  <Box
-                    sx={{
-                      position: 'absolute',
-                      right: 8,
-                      width: 4,
-                      height: 16,
-                      borderRadius: 2,
-                      backgroundColor: 'primary.main'
-                    }}
-                  />
-                )}
-              </ListItemButton>
-            </ListItem>
-          );
-        })}
-      </List>
-
-      <Divider sx={{ borderColor: 'rgba(255, 255, 255, 0.1)', mx: 2 }} />
-
-      {/* Categories Section */}
-      <Box sx={{ 
-        flex: 1, 
-        overflow: 'auto', 
-        px: 1.5, 
-        py: 2,
+{/* Scrollable Content */}
+      <Box sx={{
+        flex: 1,
+        overflow: 'auto',
+        minHeight: 0,
         '&::-webkit-scrollbar': {
           width: '8px',
         },
@@ -243,39 +185,129 @@ export default function DashboardLayout() {
         },
         scrollbarColor: '#64B5F6 transparent',
       }}>
-        <Typography variant="caption" sx={{ color: '#64748B', px: 1, mb: 1, display: 'block' }}>
-          CATEGORIES
-        </Typography>
-        <List dense>
-          {CATEGORIES.map((category) => (
-            <ListItem key={category} disablePadding>
-              <ListItemButton
-                onClick={() => {
-                  navigate(`/documents?category=${encodeURIComponent(category)}`);
-                  if (isMobile) setMobileOpen(false);
-                }}
-                sx={{ borderRadius: 1, py: 0.75 }}
-              >
-                <ListItemIcon sx={{ minWidth: 28, fontSize: '1rem', color: '#f7e3e3' }}>
-                  {categoryIcons[category] || 'no category'}
-                </ListItemIcon>
-                <ListItemText
-                  primary={category.split(' ').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ')}
-                  slotProps={{
-                    primary: {
-                      variant: 'caption',
-                      sx: { color: '#f7e3e3' }
+        {/* Main Menu */}
+        <List sx={{ px: 1.5, py: 2 }}>
+          {menuItems.map((item) => {
+            const isActive = location.pathname === item.path;
+            return (
+              <ListItem key={item.text} disablePadding sx={{ mb: 0.5 }}>
+                <ListItemButton
+                  onClick={() => {
+                    navigate(item.path);
+                    if (isMobile) setMobileOpen(false);
+                  }}
+                  sx={{
+                    borderRadius: 2,
+                    py: 1.25,
+                    backgroundColor: isActive ? 'primary.light' : 'transparent',
+                    color: isActive ? 'primary.main' : '#f7e3e3',
+                    transition: 'all 0.2s ease',
+                    '&:hover': {
+                      backgroundColor: isActive ? 'primary.light' : 'action.hover',
+                      color: isActive ? 'primary.main' : 'text.primary',
+                      '& .MuiListItemIcon-root': { color: isActive ? 'primary.main' : 'text.primary' }
                     }
                   }}
-                />
-              </ListItemButton>
-            </ListItem>
-          ))}
+                >
+                  <ListItemIcon sx={{
+                    color: isActive ? 'primary.main' : '#f7e3e3',
+                    minWidth: 38,
+                    '& svg': { fontSize: 20 }
+                  }}>
+                    {item.icon}
+                  </ListItemIcon>
+                  <ListItemText
+                    primary={item.text}
+                    slotProps={{
+                      primary: {
+                        sx: { fontWeight: isActive ? 700 : 500, fontSize: '0.9rem' }
+                      }
+                    }}
+                  />
+                  {isActive && (
+                    <Box
+                      sx={{
+                        position: 'absolute',
+                        right: 8,
+                        width: 4,
+                        height: 16,
+                        borderRadius: 2,
+                        backgroundColor: 'primary.main'
+                      }}
+                    />
+                  )}
+                </ListItemButton>
+              </ListItem>
+            );
+          })}
         </List>
+
+        <Divider sx={{ borderColor: 'rgba(255, 255, 255, 0.1)', mx: 2 }} />
+
+        {/* Categories Section */}
+        <Box sx={{
+          px: 1.5,
+          py: 2
+        }}>
+          <Typography variant="caption" sx={{ color: '#64748B', px: 1, mb: 1, display: 'block' }}>
+            CATEGORIES
+          </Typography>
+          <List dense>
+            {CATEGORIES.map((category) => (
+              <ListItem key={category} disablePadding>
+                        <ListItemButton
+                    onClick={() => {
+                      navigate(`/documents?category=${encodeURIComponent(category)}`);
+                      if (isMobile) setMobileOpen(false);
+                    }}
+                    sx={{
+                      borderRadius: 1,
+                      py: 1,
+                      px: isMobile ? 1.25 : 1.5,
+                      alignItems: 'flex-start',
+                      gap: 1,
+                      textAlign: 'left',
+                      color: '#f7e3e3',
+                      bgcolor: 'transparent',
+                      '&:hover': {
+                        bgcolor: 'rgba(255, 255, 255, 0.08)',
+                        color: '#f7e3e3'
+                      },
+                      '& .MuiListItemIcon-root, & .MuiTypography-root': {
+                        color: '#f7e3e3'
+                      }
+                    }}
+                  >
+                    <ListItemIcon sx={{ minWidth: 28, fontSize: '1rem', color: '#f7e3e3', mt: '4px' }}>
+                      {categoryIcons[category] || <Folder />}
+                    </ListItemIcon>
+                    <Box sx={{ display: 'flex', flexDirection: 'column', flex: 1, minWidth: 0 }}>
+                      <Typography
+                        variant="body2"
+                        sx={{
+                          color: '#f7e3e3',
+                          fontSize: '0.85rem',
+                          whiteSpace: 'normal',
+                          overflowWrap: 'anywhere',
+                          wordBreak: 'break-word',
+                          lineHeight: 1.3
+                        }}
+                      >
+                        {category
+                          .split(/([\s/-])/)
+                          .map((word) => word === '/' || word === '-' ? word : word.charAt(0).toUpperCase() + word.slice(1))
+                          .join('')}
+                      </Typography>
+                    </Box>
+                  </ListItemButton>
+              </ListItem>
+            ))}
+          </List>
+        </Box>
       </Box>
 
       {/* User Info Card in Sidebar */}
-      <Box sx={{ p: 2, mt: 'auto' }}>
+      <Box sx={{ p: 2, mt: 'auto', flexShrink: 0 }}>
         <Box
           sx={{
             p: 2,
@@ -314,7 +346,6 @@ export default function DashboardLayout() {
   return (
     <Box sx={{ display: 'flex', minHeight: '100vh', bgcolor: 'background.default' }}>
       {/* App Bar */}
-      {!isAdminPage && (
         <AppBar
           position="fixed"
           elevation={0}
@@ -329,16 +360,19 @@ export default function DashboardLayout() {
           }}
         >
           <Toolbar>
-            {!isAdminPage && (
-              <IconButton
-                color="inherit"
-                edge="start"
-                onClick={handleDrawerToggle}
-                sx={{ mr: 2, display: { md: 'none' } }}
-              >
-                <MenuIcon />
-              </IconButton>
-            )}
+            <IconButton
+              color="inherit"
+              edge="start"
+              onClick={handleDrawerToggle}
+              sx={{
+                mr: 2,
+                display: { md: 'none' },
+                color: 'text.primary',
+                '&:hover': { bgcolor: 'action.hover' }
+              }}
+            >
+              <MenuIcon sx={{ fontSize: 28 }} />
+            </IconButton>
 
             {/* Search Bar */}
             <Box
@@ -508,16 +542,14 @@ export default function DashboardLayout() {
             </Menu>
           </Toolbar>
         </AppBar>
-      )}
 
       {/* Sidebar */}
-      {!isAdminPage && (
         <Box
           component="nav"
           sx={{ width: { md: DRAWER_WIDTH }, flexShrink: { md: 0 } }}
         >
           {/* Mobile Drawer */}
-          <Drawer
+              <Drawer
             variant="temporary"
             open={mobileOpen}
             onClose={handleDrawerToggle}
@@ -525,7 +557,7 @@ export default function DashboardLayout() {
             sx={{
               display: { xs: 'block', md: 'none' },
               '& .MuiDrawer-paper': {
-                width: DRAWER_WIDTH
+                width: MOBILE_DRAWER_WIDTH
               }
             }}
           >
@@ -533,7 +565,7 @@ export default function DashboardLayout() {
           </Drawer>
 
           {/* Desktop Drawer */}
-          <Drawer
+              <Drawer
             variant="permanent"
             sx={{
               display: { xs: 'none', md: 'block' },
@@ -546,7 +578,6 @@ export default function DashboardLayout() {
             {drawer}
           </Drawer>
         </Box>
-      )}
 
       {/* Main Content */}
       <Box
@@ -554,8 +585,8 @@ export default function DashboardLayout() {
         sx={{
           flexGrow: 1,
           p: { xs: 2, md: 3 },
-          width: isAdminPage ? '100%' : { xs: '100%', md: `calc(100% - ${DRAWER_WIDTH}px)` },
-          mt: isAdminPage ? 0 : '64px',
+          width: { xs: '100%', md: `calc(100% - ${DRAWER_WIDTH}px)` },
+          mt: '64px',
           minHeight: 'calc(100vh - 64px)'
         }}
       >

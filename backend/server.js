@@ -120,6 +120,12 @@ const startServer = async () => {
     process.exit(1); // Stop the app if DB is not connected
   }
 };
+<<<<<<< HEAD
+
+// Start the application
+startServer();
+=======
+>>>>>>> 69c7ab8 (add limit logging)
 
 // Start the application
 startServer();

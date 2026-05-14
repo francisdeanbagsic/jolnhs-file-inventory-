@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { 
@@ -20,11 +20,28 @@ import { useAuthStore } from '../store/authStore';
 
 export default function AdminLoginPage() {
   const navigate = useNavigate();
-  const { login, logout, isLoading, error } = useAuthStore();
+  const { login, logout, isLoading, error, lockoutExpiresAt } = useAuthStore();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [localError, setLocalError] = useState<string | null>(null);
+  const [lockoutSeconds, setLockoutSeconds] = useState(0);
+
+  useEffect(() => {
+    if (!lockoutExpiresAt) {
+      setLockoutSeconds(0);
+      return;
+    }
+
+    const update = () => {
+      const seconds = Math.max(0, Math.ceil((lockoutExpiresAt - Date.now()) / 1000));
+      setLockoutSeconds(seconds);
+    };
+
+    update();
+    const timer = window.setInterval(update, 1000);
+    return () => window.clearInterval(timer);
+  }, [lockoutExpiresAt]);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -54,6 +71,12 @@ if (!email.trim() || !password.trim()) {
     // No need to set error here, you're already showing it from the store
   }
   };
+
+  const isLockoutActive = !!lockoutExpiresAt && lockoutExpiresAt > Date.now();
+  const lockoutMessage = isLockoutActive
+    ? `Login attempt exceeded. Please wait ${lockoutSeconds} second${lockoutSeconds !== 1 ? 's' : ''} before trying again.`
+    : null;
+  const isLoginDisabled = isLoading || isLockoutActive;
 
   return (
     <Box
@@ -155,13 +178,13 @@ if (!email.trim() || !password.trim()) {
             </Typography>
           </Box>
 
-          {(error || localError) && (
+          {(error || localError || lockoutMessage) && (
             <motion.div
               initial={{ opacity: 0, height: 0 }}
               animate={{ opacity: 1, height: 'auto' }}
             >
               <Alert severity="error" sx={{ mb: 3 }}>
-                {localError || error}
+                {lockoutMessage || localError || error}
               </Alert>
             </motion.div>
           )}
@@ -210,7 +233,7 @@ if (!email.trim() || !password.trim()) {
               fullWidth
               variant="contained"
               color="primary"
-              disabled={isLoading}
+              disabled={isLoginDisabled}
               sx={{
                 py: { xs: 1.25, sm: 1.5 },
                 fontSize: { xs: '0.9rem', sm: '1rem' },

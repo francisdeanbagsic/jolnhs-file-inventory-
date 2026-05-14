@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { 
@@ -20,10 +20,27 @@ import { useAuthStore } from '../store/authStore';
 
 export default function LoginPage() {
   const navigate = useNavigate();
-  const { login, isLoading, error } = useAuthStore();
+  const { login, isLoading, error, lockoutExpiresAt } = useAuthStore();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
+  const [lockoutSeconds, setLockoutSeconds] = useState(0);
+
+  useEffect(() => {
+    if (!lockoutExpiresAt) {
+      setLockoutSeconds(0);
+      return;
+    }
+
+    const update = () => {
+      const seconds = Math.max(0, Math.ceil((lockoutExpiresAt - Date.now()) / 1000));
+      setLockoutSeconds(seconds);
+    };
+
+    update();
+    const timer = window.setInterval(update, 1000);
+    return () => window.clearInterval(timer);
+  }, [lockoutExpiresAt]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -35,6 +52,12 @@ export default function LoginPage() {
       // Error is handled in store
     }
   };
+
+  const isLockoutActive = !!lockoutExpiresAt && lockoutExpiresAt > Date.now();
+  const lockoutMessage = isLockoutActive
+    ? `Login attempt exceeded. Please wait ${lockoutSeconds} second${lockoutSeconds !== 1 ? 's' : ''} before trying again.`
+    : null;
+  const isLoginDisabled = isLoading || isLockoutActive;
 
   return (
     <Box
@@ -139,13 +162,13 @@ export default function LoginPage() {
             </Typography>
           </Box>
 
-          {error && (
+          {(error || lockoutMessage) && (
             <motion.div
               initial={{ opacity: 0, height: 0 }}
               animate={{ opacity: 1, height: 'auto' }}
             >
               <Alert severity="error" sx={{ mb: 3 }}>
-                {error}
+                {lockoutMessage || error}
               </Alert>
             </motion.div>
           )}
@@ -210,7 +233,7 @@ export default function LoginPage() {
               type="submit"
               fullWidth
               variant="contained"
-              disabled={isLoading}
+              disabled={isLoginDisabled}
               sx={{
                 py: { xs: 1.25, sm: 1.5 },
                 fontSize: { xs: '0.9rem', sm: '1rem' },

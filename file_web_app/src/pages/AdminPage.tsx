@@ -344,7 +344,7 @@ export default function AdminPage() {
                   </Typography>
                 </Box>
               </Box>
-              <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', sm: 'repeat(2, minmax(0, 1fr))', lg: 'repeat(3, minmax(0, 1fr))' }, gap: 2 }}>
+              <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', sm: 'repeat(2, minmax(0, 1fr))', md: 'repeat(2, minmax(0, 1fr))', lg: 'repeat(3, minmax(0, 1fr))' }, gap: 2 }}>
                 {isLoading ? (
                   Array.from({ length: 6 }).map((_, i) => (
                     <Skeleton key={i} variant="rounded" height={100} sx={{ borderRadius: 2 }} />
@@ -354,12 +354,24 @@ export default function AdminPage() {
                     const colors = ['primary.main', 'secondary.main', 'success.main', 'info.main', 'warning.main'];
                     const color = colors[index % colors.length];
                     return (
-                      <Card key={category} sx={{ bgcolor: 'background.paper', borderRadius: 2, minHeight: 100, border: `1px solid`, borderColor: 'divider' }}>
-                        <CardContent>
-                          <Typography variant="body2" sx={{ color: 'text.secondary', textTransform: 'capitalize', mb: 1, fontWeight: 500 }}>
+                      <Card key={category} sx={{ bgcolor: 'background.paper', borderRadius: 2, minHeight: 110, border: `1px solid`, borderColor: 'divider' }}>
+                        <CardContent sx={{ p: 2.25, display: 'flex', flexDirection: 'column', justifyContent: 'space-between', gap: 1 }}>
+                          <Typography
+                            variant="body1"
+                            sx={{
+                              color: 'text.secondary',
+                              textTransform: 'capitalize',
+                              mb: 0.75,
+                              fontWeight: 600,
+                              fontSize: { xs: '0.92rem', sm: '1rem' },
+                              lineHeight: 1.4,
+                              overflowWrap: 'anywhere',
+                              wordBreak: 'break-word'
+                            }}
+                          >
                             {category.replace(/[-/]/g, ' ')}
                           </Typography>
-                          <Typography variant="h6" sx={{ fontWeight: 700, color }}>
+                          <Typography variant="h5" sx={{ fontWeight: 700, color, fontSize: { xs: '1.2rem', sm: '1.4rem' } }}>
                             {stats?.documentsByCategory[category] ?? 0}
                           </Typography>
                         </CardContent>

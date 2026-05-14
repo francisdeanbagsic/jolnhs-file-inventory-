@@ -6,7 +6,8 @@ const router = express.Router();
 
 // Login
 
-
+const MAX_FAILED_ATTEMPTS = 5;
+const LOCK_TIME_MS = 60 * 1000; // 60 seconds
 
 router.post('/login', async (req, res) => {
   try {
@@ -18,17 +19,51 @@ router.post('/login', async (req, res) => {
     }
 
     const user = await User.findOne({ email: email.toLowerCase() });
-    console.log('User found:', !!user, user ? { id: user._id, email: user.email, isActive: user.isActive, hasPassword: !!user.password } : null);
+    console.log('User found:', !!user, user ? { id: user._id, email: user.email, isActive: user.isActive, hasPassword: !!user.password, failedLoginAttempts: user.failedLoginAttempts, lockUntil: user.lockUntil } : null);
 
     if (!user || !user.isActive) {
       return res.status(401).json({ message: 'Invalid credentials or account inactive' });
+    }
+
+    const now = Date.now();
+    if (user.lockUntil && user.lockUntil > now) {
+      const waitSeconds = Math.ceil((user.lockUntil - now) / 1000);
+      return res.status(429).json({
+        message: `Login attempt exceeded. Please wait ${waitSeconds} second${waitSeconds !== 1 ? 's' : ''} before trying again.`,
+        lockoutExpiresAt: user.lockUntil ? user.lockUntil.getTime() : null ? user.lockUntil.getTime() : null
+      });
+    }
+
+    if (user.lockUntil && user.lockUntil <= now) {
+      user.failedLoginAttempts = 0;
+      user.lockUntil = null;
+      await user.save();
     }
 
     const isMatch = await user.comparePassword(password);
     console.log('Password match:', isMatch);
 
     if (!isMatch) {
+      user.failedLoginAttempts = (user.failedLoginAttempts || 0) + 1;
+      if (user.failedLoginAttempts >= MAX_FAILED_ATTEMPTS) {
+        user.lockUntil = new Date(Date.now() + LOCK_TIME_MS);
+      }
+      await user.save();
+
+      if (user.lockUntil && user.lockUntil > Date.now()) {
+        const waitSeconds = Math.ceil((user.lockUntil - Date.now()) / 1000);
+        return res.status(429).json({
+          message: `Login attempt exceeded. Please wait ${waitSeconds} second${waitSeconds !== 1 ? 's' : ''} before trying again.`,
+          lockoutExpiresAt: user.lockUntil
+        });
+      }
+
       return res.status(401).json({ message: 'Invalid credentials' });
+    }
+    if (user.failedLoginAttempts || user.lockUntil) {
+      user.failedLoginAttempts = 0;
+      user.lockUntil = null;
+      await user.save();
     }
     const token = generateToken(user._id);
     
