@@ -34,7 +34,7 @@ const ADMIN_NAME = process.env.ADMIN_NAME || 'System Administrator';
 
 const allowedOrigins = process.env.CORS_ORIGINS
   ? process.env.CORS_ORIGINS.split(',').map(origin => origin.trim()).filter(Boolean)
-  : ['https://jolnhs-file-inventory-lmmj.onrender.com', 'http://localhost:5173','https://jolnhs-acr.netlify.app'];
+  : ['https://jolnhs-file-inventory-lmmj.onrender.com', 'http://localhost:5173','https://jolnhs-acr.netlify.app',"https://jolnhsacr.netlify.app"];
 
 // CORS Configuration
 const corsOptions = {
