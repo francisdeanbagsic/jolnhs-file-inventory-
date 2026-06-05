@@ -34,7 +34,7 @@ const ADMIN_NAME = process.env.ADMIN_NAME || 'System Administrator';
 
 const allowedOrigins = process.env.CORS_ORIGINS
   ? process.env.CORS_ORIGINS.split(',').map(origin => origin.trim()).filter(Boolean)
-  : ['https://jolnhs-acr.onrender.com', 'http://localhost:5173','https://jolnhs-acr.netlify.app'];
+  : ['https://jolnhs-file-inventory-lmmj.onrender.com', 'http://localhost:5173','https://jolnhs-acr.netlify.app'];
 
 // CORS Configuration
 const corsOptions = {
@@ -77,9 +77,9 @@ const connectDB = async () => {
       socketTimeoutMS: 45000,
       connectTimeoutMS: 20000,
     });
-    console.log('✅ MongoDB Connected successfully');
+    console.log(' MongoDB Connected successfully');
   } catch (error) {
-    console.error('❌ MongoDB Connection Error:', error.message);
+    console.error(' MongoDB Connection Error:', error.message);
     throw error;
   }
 };
@@ -97,7 +97,7 @@ const seedAdmin = async () => {
         role: 'admin',
         isActive: true
       });
-      console.log(`✅ Default admin created: ${ADMIN_EMAIL}`);
+      console.log(` Default admin created: ${ADMIN_EMAIL}`);
     } else {
       console.log(`Admin user already exists: ${ADMIN_EMAIL}`);
     }
@@ -113,7 +113,7 @@ const startServer = async () => {
     await seedAdmin();
 
     app.listen(PORT, () => {
-      console.log(`🚀 Server running on port ${PORT}`);
+      console.log(` Server running on port ${PORT}`);
     });
   } catch (error) {
     console.error('Failed to start due to database connection failure.');
